@@ -10,7 +10,7 @@ Features implemented:
 [] Source flattening<br />
 [] Fetch IPFS <br />
 
-Roadmap:
+Roadmap:<br />
 -Building the extension itself<br />
 -Prettify the output<br />
 -Add functionnality for hash based dependency(imphash), file hashes, differencial, etc...<br />
