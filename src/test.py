@@ -180,6 +180,7 @@ def serve():
 @app.route('/result',methods = ['POST'])
 def Postserve():
     form_data = request.form
+    form_data = ComparerAddress(form_data)
     return render_template('index.html',form_data = form_data)
 
 if __name__ == '__main__':
