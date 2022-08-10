@@ -176,7 +176,7 @@ def ComparerAddress(args):
 
 @app.route('/index.html')
 def serve():
-    return render_template('index.html')
+    return render_template('index.html',form_data = {})
 @app.route('/result',methods = ['POST'])
 def Postserve():
     form_data = request.form
