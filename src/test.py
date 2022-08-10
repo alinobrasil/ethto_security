@@ -21,6 +21,11 @@ import argparse
 import subprocess
 import shlex
 from dotenv import dotenv_values
+from flask import Flask,render_template,request
+from flask_cors import CORS
+# Initializing flask app
+app = Flask(__name__)
+CORS(app)
 dot_env = dotenv_values(".env")
 ETHERSCAN_API_KEY = dot_env['ETHERSCAN_API_KEY']
 w3 = Web3(HTTPProvider('https://dimensional-muddy-surf.discover.quiknode.pro/ce6130ce76e55ee49c0909c063f57ee15f028315/'))
@@ -29,6 +34,8 @@ Etherscan = "https://etherscan.io/address/"
 Verification_URL = "https://etherscan.io/contractsVerified"
 AuditVerification_URL = "https://etherscan.io/contractsVerified?filter=audit"
 ns = ENS.fromWeb3(w3)
+
+
 
 
 Norenentrancy = yara.compile(filepath='reentrancy.yara')
@@ -167,20 +174,29 @@ def ComparerAddress(args):
         result = result | {"BadRandomness" : False}
     print(result)
 
+@app.route('/index.html')
+def serve():
+    return render_template('index.html')
+@app.route('/result',methods = ['POST'])
+def Postserve():
+    form_data = request.form
+    return render_template('index.html',form_data = form_data)
 
-if __name__=="__main__":
-    parser = argparse.ArgumentParser(description='Filepaths of contract to compare')
-    parser.add_argument('--path1',help='Filepath of the source contract')
-    parser.add_argument('--path2',help='Filepath of the compared contract')
-    parser.add_argument('--type',choices=['ABI','source','address'], help="Type of file provided")
-    parser.add_argument('--address', help="Address of the smart contract")
-    args = parser.parse_args()
-    if args.path1 and args.path2 and args.type in ['ABI','source']:
-        args = parser.parse_args()
-        Comparer(args)
-    elif args.type == 'address' and args.address:
-        args = parser.parse_args()
-        ComparerAddress(args)
+if __name__ == '__main__':
+    app.run(debug=True)
+
+    #parser = argparse.ArgumentParser(description='Filepaths of contract to compare')
+    #parser.add_argument('--path1',help='Filepath of the source contract')
+    #parser.add_argument('--path2',help='Filepath of the compared contract')
+    #parser.add_argument('--type',choices=['ABI','source','address'], help="Type of file provided")
+    #parser.add_argument('--address', help="Address of the smart contract")
+    #args = parser.parse_args()
+    #if args.path1 and args.path2 and args.type in ['ABI','source']:
+    #    args = parser.parse_args()
+    #    Comparer(args)
+    #elif args.type == 'address' and args.address:
+    #    args = parser.parse_args()
+    #    ComparerAddress(args)
 
 
         
