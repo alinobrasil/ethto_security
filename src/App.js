@@ -23,13 +23,13 @@ function App() {
     ).then(response => {
     return response.json()
     })
-    fetch("/${inputVal}").then((res) =>
+    fetch("/result").then((res) =>
             res.json().then((contractAddress) => {
                 setContractAddress({
-                    name: data.Name,
-                    age: data.Age,
-                    date: data.Date,
-                    programming: data.programming,
+                    name: contractAddress.Name,
+                    age: contractAddress.Age,
+                    date: contractAddress.Date,
+                    programming: contractAddress.programming,
                 });
             })
         
