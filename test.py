@@ -7,6 +7,7 @@ from eth_utils import event_abi_to_log_topic, to_hex
 from hexbytes import HexBytes
 from pyevmasm import instruction_tables, disassemble_hex, disassemble_all, assemble_hex
 from ens import ENS
+import json
 from cdifflib import CSequenceMatcher
 import difflib
 difflib.SequenceMatcher = CSequenceMatcher
@@ -146,20 +147,20 @@ def ComparerAddress(args):
     result = result | {'EtherScanAudit' : AuditVerification_URL }
     matches = Norenentrancy.match(data=source, callback=yara_callback, which_callbacks=yara.CALLBACK_MATCHES, timeout=60)
     if matches:
-        result = result | {"Reentrancy" : not(matches.matches)}
+        result = result | {"Reentrancy" : False}
     else:
         result = result | {"Reentrancy" : "Potential"}
-    matches = selfdestruct.match(source, callback=yara_callback, which_callbacks=yara.CALLBACK_MATCHES, timeout=60)
+    matches = selfdestruct.match(data=source, callback=yara_callback, which_callbacks=yara.CALLBACK_MATCHES, timeout=60)
     if matches:
-        result = result | {"SelfDestruct" : matches.matches}
+        result = result | {"SelfDestruct" : False}
     else:
         result = result | {"SelfDestruct" : True}
-    matches = PrivateStorage.match(source, callback=yara_callback, which_callbacks=yara.CALLBACK_MATCHES, timeout=60)
+    matches = PrivateStorage.match(data=source, callback=yara_callback, which_callbacks=yara.CALLBACK_MATCHES, timeout=60)
     if matches:
         result = result | {"PrivateStorage" : matches.matches}
     else:
         result = result | {"PrivateStorage" : False}
-    matches = BadRandomness.match(source, callback=yara_callback, which_callbacks=yara.CALLBACK_MATCHES, timeout=60)
+    matches = BadRandomness.match(data=source, callback=yara_callback, which_callbacks=yara.CALLBACK_MATCHES, timeout=60)
     if matches:
         result = result | {"BadRandomness" : matches.matches}
     else:
